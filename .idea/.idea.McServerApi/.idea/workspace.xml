@@ -7,10 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Maps.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Maps.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/McServerApi/Services/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Services/Server.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.bat" beforeDir="false" afterPath="$PROJECT_DIR$/build.bat" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +15,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b12ad9547e42ca3978b2148023a81a888a7874c1b210dc6def9fc0e7739e19/AsyncVoidMethodBuilder.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -83,7 +78,8 @@
       <updated>1662762830049</updated>
       <workItem from="1662762834878" duration="4882000" />
       <workItem from="1662805700667" duration="10082000" />
-      <workItem from="1662829034123" duration="6808000" />
+      <workItem from="1662829034123" duration="8386000" />
+      <workItem from="1662839464708" duration="97000" />
     </task>
     <servers />
   </component>
@@ -124,13 +120,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/McServerApi/Services/Server.cs</url>
-          <line>112</line>
+          <line>119</line>
           <properties documentPath="E:\Dev\McServerApi\McServerApi\Services\Server.cs" initialLine="104" containingFunctionPresentation="method 'Stop'">
             <startOffsets>
-              <option value="3342" />
+              <option value="3577" />
             </startOffsets>
             <endOffsets>
-              <option value="3375" />
+              <option value="3610" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

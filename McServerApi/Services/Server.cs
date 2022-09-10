@@ -28,7 +28,7 @@ public class Server
         _storage = storage;
         _terminal.OnNewLine += (terminal, s) =>
         {
-            if (s.Contains("[Server thread/INFO]: Done ("))
+            if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?"))
                 Status = ServerStatus.Ready;
         };
     }
@@ -39,8 +39,6 @@ public class Server
             return;
         
         Status = ServerStatus.Initialising;
-        if (Directory.Exists(WORKDIR))
-            Directory.Delete(WORKDIR, true);
         
         ServerTemplate? mcServerJar = _storage.Servers.Find(x => x.Version == _storage.CurrentConfiguration.ServerVersion);
         MapTemplate? mcServerMap = _storage.Maps.Find(x => x.Name == _storage.CurrentConfiguration.MapName);
@@ -48,7 +46,7 @@ public class Server
 
         if (mcServerJar == null || mcServerJava == null)
         {
-            Console.WriteLine("Invalid configuration");
+            Log("Invalid configuration");
             Status = ServerStatus.Dead;
             return;
         }
@@ -59,14 +57,22 @@ public class Server
             return;
         }
         
+        if (Directory.Exists(WORKDIR))
+        {
+            Log("Deleting old directory");
+            Directory.Delete(WORKDIR, true);
+        }
+        
+        Log("Creating new directory");
         Utils.CopyDirectory(TEMPLATEDIR, WORKDIR, true);
-
+        
+        Log("Downloading new .jar");
         using (HttpClient client = new())
         {
             var response = await client.GetAsync(mcServerJar.Url);
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine("Invalid server url");
+                Log("Invalid server url");
                 Status = ServerStatus.Dead;
                 return;
             }
@@ -79,7 +85,7 @@ public class Server
 
         if (mcServerMap == null)
         {
-            Console.WriteLine("Map not found, not creating symlink");
+            Log("Map not found, not creating symlink");
         }
         else
         {
@@ -100,6 +106,7 @@ public class Server
     {
         _terminal.WorkingDirectory = workingDir;
         Status = ServerStatus.Started;
+        Log("Starting server");
         bool result = await _terminal.Exec(java.Path, "-Xmx8G -Xms1G -jar server.jar nogui");
 
         if (!result)
@@ -116,4 +123,6 @@ public class Server
         Status = ServerStatus.Stopping;
         _terminal.WriteToStdIn("stop");
     }
+
+    public void Log(string msg) => Console.WriteLine($"[Server] {msg}");
 }
