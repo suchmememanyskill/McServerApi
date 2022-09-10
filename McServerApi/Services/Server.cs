@@ -28,7 +28,7 @@ public class Server
         _storage = storage;
         _terminal.OnNewLine += (terminal, s) =>
         {
-            if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?"))
+            if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?") || s.Contains("[minecraft/DedicatedServer]: Done ("))
                 Status = ServerStatus.Ready;
         };
     }

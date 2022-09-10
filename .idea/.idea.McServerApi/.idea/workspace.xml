@@ -6,7 +6,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/McServerApi/Services/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Services/Server.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +78,7 @@
       <workItem from="1662762834878" duration="4882000" />
       <workItem from="1662805700667" duration="10082000" />
       <workItem from="1662829034123" duration="8386000" />
-      <workItem from="1662839464708" duration="97000" />
+      <workItem from="1662839464708" duration="388000" />
     </task>
     <servers />
   </component>
@@ -123,10 +122,10 @@
           <line>119</line>
           <properties documentPath="E:\Dev\McServerApi\McServerApi\Services\Server.cs" initialLine="104" containingFunctionPresentation="method 'Stop'">
             <startOffsets>
-              <option value="3577" />
+              <option value="3630" />
             </startOffsets>
             <endOffsets>
-              <option value="3610" />
+              <option value="3663" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />
