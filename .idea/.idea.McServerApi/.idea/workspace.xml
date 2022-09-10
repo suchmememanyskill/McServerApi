@@ -6,17 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/McServerApi/Model/ConfigStatusPost.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Config.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Versions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Versions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Model/CurrentConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/CurrentConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Model/MapTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/MapTemplate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/McServerApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Services/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Services/Server.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +79,7 @@
       <updated>1662762830049</updated>
       <workItem from="1662762834878" duration="4882000" />
       <workItem from="1662805700667" duration="10082000" />
-      <workItem from="1662829034123" duration="4784000" />
+      <workItem from="1662829034123" duration="5551000" />
     </task>
     <servers />
   </component>

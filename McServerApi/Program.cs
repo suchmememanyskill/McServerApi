@@ -17,6 +17,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (File.Exists("DEBUG"))
 {
+    Console.WriteLine("Enabling SwaggerUI");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
