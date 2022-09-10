@@ -34,6 +34,13 @@ public class Maps : ControllerBase
             return;
         }
 
+        if (data.MapName != "")
+        {
+            MapTemplate t = MapTemplates.Find(x => x.Name == data.MapName)!;
+            if (_storage.Servers.Any(x => x.Version == t.MinecraftVersion))
+                Configuration.ServerVersion = t.MinecraftVersion;
+        }
+
         Configuration.MapName = data.MapName;
         _storage.Save();
     }
@@ -50,6 +57,12 @@ public class Maps : ControllerBase
 
         if (Path.GetInvalidFileNameChars().Any(map_name.Contains))
             throw new Exception("Invalid map name");
+
+        if (suggested_mc_version != "unk")
+        {
+            if (_storage.Servers.All(x => x.Version != suggested_mc_version))
+                throw new Exception("Invalid suggested mc version");
+        }
         
         string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         Directory.CreateDirectory(tempDirectory);
