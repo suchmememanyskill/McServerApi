@@ -26,8 +26,27 @@ public class Config : ControllerBase
     }
 
     [HttpPost("state")]
-    public void State(bool state)
+    public void State(ConfigStatusPost data)
     {
-        
+        if (data.Status)
+        {
+            if (!(_server.Status is ServerStatus.Stopped or ServerStatus.Dead))
+            {
+                Response.StatusCode = 409;
+                return;
+            }
+            _server.Start();
+        }
+        else
+        {
+            if (_server.Status != ServerStatus.Ready)
+            {
+                Response.StatusCode = 409;
+                return;
+            }
+            
+            _server.Stop();
+        }
+            
     }
 }

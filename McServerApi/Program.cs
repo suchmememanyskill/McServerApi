@@ -1,4 +1,5 @@
 using McServerApi.Services;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +15,11 @@ builder.Services.AddSingleton<Server>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (File.Exists("DEBUG"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseHttpsRedirection();
 

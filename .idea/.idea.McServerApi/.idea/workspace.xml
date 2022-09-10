@@ -5,16 +5,36 @@
     <projectFile profileName="IIS Express">McServerApi/McServerApi.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="" />
+    <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/McServerApi/Model/ConfigStatusPost.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Config.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Versions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Versions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Model/CurrentConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/CurrentConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Model/MapTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/MapTemplate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Services/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Services/Server.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b12ad9547e42ca3978b2148023a81a888a7874c1b210dc6def9fc0e7739e19/AsyncVoidMethodBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2EYBqQsVAJmSiH5WwDsmYO69NcF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -68,14 +88,27 @@
       <option name="presentableId" value="Default" />
       <updated>1662762830049</updated>
       <workItem from="1662762834878" duration="4882000" />
-      <workItem from="1662805700667" duration="8081000" />
+      <workItem from="1662805700667" duration="10082000" />
+      <workItem from="1662829034123" duration="4784000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
@@ -84,16 +117,29 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/McServerApi/Controllers/Config.cs</url>
-          <line>31</line>
-          <properties documentPath="E:\Dev\McServerApi\McServerApi\Controllers\Config.cs" initialLine="25" containingFunctionPresentation="method 'State'">
+          <line>41</line>
+          <properties documentPath="E:\Dev\McServerApi\McServerApi\Controllers\Config.cs" initialLine="41" containingFunctionPresentation="method 'State'">
             <startOffsets>
-              <option value="661" />
+              <option value="943" />
             </startOffsets>
             <endOffsets>
-              <option value="662" />
+              <option value="984" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="3" />
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/McServerApi/Services/Server.cs</url>
+          <line>104</line>
+          <properties documentPath="E:\Dev\McServerApi\McServerApi\Services\Server.cs" initialLine="104" containingFunctionPresentation="method 'Stop'">
+            <startOffsets>
+              <option value="3172" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3205" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
