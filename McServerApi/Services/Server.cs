@@ -46,7 +46,7 @@ public class Server
         MapTemplate? mcServerMap = _storage.Maps.Find(x => x.Name == _storage.CurrentConfiguration.MapName);
         JavaTemplate? mcServerJava = _storage.Javas.Find(x => x.Version == (mcServerJar?.JavaVersion ?? "_"));
 
-        if (mcServerJar == null || mcServerMap == null || mcServerJava == null)
+        if (mcServerJar == null || mcServerJava == null)
         {
             Console.WriteLine("Invalid configuration");
             Status = ServerStatus.Dead;
@@ -77,14 +77,22 @@ public class Server
             }
         }
 
-        if (!Directory.Exists(mcServerMap.Path))
+        if (mcServerMap == null)
         {
-            Console.WriteLine("Invalid map");
-            Status = ServerStatus.Dead;
-            return;
+            Console.WriteLine("Map not found, not creating symlink");
         }
+        else
+        {
+            if (!Directory.Exists(mcServerMap.Path))
+            {
+                Console.WriteLine("Invalid map");
+                Status = ServerStatus.Dead;
+                return;
+            }
 
-        var res = File.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
+            var res = File.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
+        }
+        
         Launch(WORKDIR, mcServerJava);
     }
 

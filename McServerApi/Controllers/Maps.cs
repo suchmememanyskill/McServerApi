@@ -28,7 +28,7 @@ public class Maps : ControllerBase
     [HttpPost]
     public void Set(MapSetPost data)
     {
-        if (MapTemplates.All(x => x.Name != data.MapName))
+        if (MapTemplates.All(x => x.Name != data.MapName) && data.MapName != "")
         {
             Response.StatusCode = 404;
             return;
