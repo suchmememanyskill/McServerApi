@@ -19,14 +19,13 @@ public class Status : ControllerBase
     }
 
     [HttpGet]
-    public CurrentConfiguration Get()
+    public StatusGet Get()
     {
-        CurConfig.Server = _server;
-        return CurConfig;
+        return new(_storage, _server);
     }
 
     [HttpPost("state")]
-    public void State(ConfigStatusPost data)
+    public void State(StatusStatePost data)
     {
         if (data.Status)
         {

@@ -1,6 +1,6 @@
 ﻿namespace McServerApi.Model;
 
-public class ConfigStatusPost
+public class StatusStatePost
 {
     public bool Status { get; set; }
 }

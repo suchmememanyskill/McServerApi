@@ -8,4 +8,5 @@ public class MapTemplate
     [JsonIgnore]
     public string Path { get; set; } = "~/maps/my_world";
     public string MinecraftVersion { get; set; } = "unk";
+    public bool ReadOnly { get; set; }
 }

@@ -121,7 +121,16 @@ public class Server
                 return;
             }
 
-            var res = File.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
+            if (mcServerMap.ReadOnly)
+            {
+                Log("Copying read-only map");
+                Utils.CopyDirectory(Path.GetFullPath(mcServerMap.Path), Path.Join(WORKDIR, "world"), true);
+            }
+            else
+            {
+                Log("Creating symlink for map");
+                File.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
+            }
         }
         
         Launch(WORKDIR, mcServerJava);

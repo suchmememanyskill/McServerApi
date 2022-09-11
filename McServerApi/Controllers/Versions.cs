@@ -24,7 +24,7 @@ public class Versions : ControllerBase
     }
 
     [HttpPost]
-    public void Set(ServerVersionPost data)
+    public void Set(VersionPost data)
     {
         ServerTemplate? find = Servers.Find(x => x.Version == data.Version);
 

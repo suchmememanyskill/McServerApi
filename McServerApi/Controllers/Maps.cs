@@ -27,7 +27,7 @@ public class Maps : ControllerBase
     }
 
     [HttpPost]
-    public void Set(MapSetPost data)
+    public void Set(MapsPost data)
     {
         if (MapTemplates.All(x => x.Name != data.MapName) && data.MapName != "")
         {
@@ -49,7 +49,7 @@ public class Maps : ControllerBase
     [HttpPost("new")]
     public void New(MapsNewPost post)
     {
-        MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion);
+        MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion, false);
         Directory.CreateDirectory(template.Path);
         MapTemplates.Add(template);
         _storage.Save();
@@ -78,9 +78,9 @@ public class Maps : ControllerBase
 
     [HttpPost("{map_name}")]
     [DisableRequestSizeLimit]
-    public void Create(string map_name, IFormFile file, string suggested_mc_version = "unk")
+    public void Create(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
     {
-        MapTemplate template = CreateTemplate(map_name, suggested_mc_version);
+        MapTemplate template = CreateTemplate(map_name, suggested_mc_version, read_only);
         
         if (file.Length > 0x10000000)
             throw new Exception("File size is over 256mb");
@@ -114,7 +114,7 @@ public class Maps : ControllerBase
         Directory.Delete(tempDirectory, true);
     }
 
-    private MapTemplate CreateTemplate(string name, string version)
+    private MapTemplate CreateTemplate(string name, string version, bool readOnly)
     {
         if (name == null || version == null)
             throw new Exception("Parameters are null");
@@ -140,7 +140,8 @@ public class Maps : ControllerBase
         {
             Name = name,
             MinecraftVersion = version,
-            Path = Path.Join(WORKDIR, name)
+            Path = Path.Join(WORKDIR, name),
+            ReadOnly = readOnly
         };
     }
 }
