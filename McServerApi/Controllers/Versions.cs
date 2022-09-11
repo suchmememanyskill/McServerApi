@@ -24,17 +24,18 @@ public class Versions : ControllerBase
     }
 
     [HttpPost]
-    public void Set(VersionPost data)
+    public string Set(VersionPost data)
     {
         ServerTemplate? find = Servers.Find(x => x.Version == data.Version);
 
         if (find == null)
         {
             Response.StatusCode = 404;
-            return;
+            return "Could not find version";
         }
 
         Config.ServerVersion = find.Version;
         _storage.Save();
+        return "OK";
     }
 }

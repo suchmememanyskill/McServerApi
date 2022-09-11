@@ -25,14 +25,14 @@ public class Status : ControllerBase
     }
 
     [HttpPost("state")]
-    public void State(StatusStatePost data)
+    public string State(StatusStatePost data)
     {
         if (data.Status)
         {
             if (!(_server.Status is ServerStatus.Stopped or ServerStatus.Dead))
             {
                 Response.StatusCode = 409;
-                return;
+                return "Server is already active";
             }
             _server.Start();
         }
@@ -41,11 +41,12 @@ public class Status : ControllerBase
             if (_server.Status != ServerStatus.Ready)
             {
                 Response.StatusCode = 409;
-                return;
+                return "Server is not ready";
             }
             
             _server.Stop();
         }
-            
+
+        return "OK";
     }
 }

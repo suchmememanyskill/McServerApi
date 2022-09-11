@@ -27,12 +27,12 @@ public class Maps : ControllerBase
     }
 
     [HttpPost]
-    public void Set(MapsPost data)
+    public string Set(MapsPost data)
     {
         if (MapTemplates.All(x => x.Name != data.MapName) && data.MapName != "")
         {
             Response.StatusCode = 404;
-            return;
+            return "Could not find map";
         }
 
         if (data.MapName != "")
@@ -44,26 +44,36 @@ public class Maps : ControllerBase
 
         Configuration.MapName = data.MapName;
         _storage.Save();
+        return "OK";
     }
 
     [HttpPost("new")]
-    public void New(MapsNewPost post)
+    public string New(MapsNewPost post)
     {
-        MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion, false);
-        Directory.CreateDirectory(template.Path);
-        MapTemplates.Add(template);
-        _storage.Save();
+        try
+        {
+            MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion, false);
+            Directory.CreateDirectory(template.Path);
+            MapTemplates.Add(template);
+            _storage.Save();
+            return "OK";
+        }
+        catch (Exception e)
+        {
+            Response.StatusCode = 400;
+            return e.Message;
+        }
     }
 
     [HttpDelete("{map_name}")]
-    public void Delete(string map_name)
+    public string Delete(string map_name)
     {
         MapTemplate? template = MapTemplates.Find(x => x.Name == map_name);
 
         if (template == null)
         {
             Response.StatusCode = 404;
-            return;
+            return "Could not find map";
         }
 
         Directory.CreateDirectory(DELDIR);
@@ -74,12 +84,27 @@ public class Maps : ControllerBase
         Directory.Move(oldPath, newPath);
         MapTemplates.Remove(template);
         _storage.Save();
+        return "OK";
     }
 
     [HttpPost("{map_name}")]
     [DisableRequestSizeLimit]
     [RequestFormLimits(MultipartBodyLengthLimit = 0x10000000)]
-    public void Create(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
+    public string Create(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
+    {
+        try
+        { 
+            CreateActual(map_name, file, suggested_mc_version, read_only);
+            return "OK";
+        }
+        catch (Exception e)
+        {
+            Response.StatusCode = 400;
+            return e.Message;
+        }
+    }
+
+    private void CreateActual(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
     {
         MapTemplate template = CreateTemplate(map_name, suggested_mc_version, read_only);
         
