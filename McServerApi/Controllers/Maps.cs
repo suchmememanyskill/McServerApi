@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using System.Web;
 using McServerApi.Model;
 using McServerApi.Services;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -32,7 +33,13 @@ public class Maps : ControllerBase
     {
         var map = MapTemplates.Find(x => x.Name == map_name);
         if (map == null)
-            return NotFound();
+        {
+            map_name = HttpUtility.UrlDecode(map_name);
+            map = MapTemplates.Find(x => x.Name == map_name);
+            if (map == null)
+                return NotFound();
+        }
+            
         
         if (!System.IO.File.Exists(Path.Join(map.Path, "resources.zip")))
             return NotFound();

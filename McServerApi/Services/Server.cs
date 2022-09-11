@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Web;
 using LauncherGamePlugin;
 using McServerApi.Model;
 
@@ -97,7 +98,7 @@ public class Server
         {
             string content = await File.ReadAllTextAsync(propertiesPath);
             content = content.Replace("{{RESOURCE_URL}}",
-                (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{mcServerMap.Name}" : "");
+                (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{HttpUtility.UrlEncode(mcServerMap.Name)}" : "");
             await File.WriteAllTextAsync(propertiesPath, content);
         }
 
