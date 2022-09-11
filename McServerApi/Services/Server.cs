@@ -98,7 +98,7 @@ public class Server
         {
             string content = await File.ReadAllTextAsync(propertiesPath);
             content = content.Replace("{{RESOURCE_URL}}",
-                (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{HttpUtility.UrlEncode(mcServerMap.Name)}" : "");
+                (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{HttpUtility.UrlEncode(mcServerMap.Name)}".Replace(":", "\\:") : "");
             await File.WriteAllTextAsync(propertiesPath, content);
         }
 

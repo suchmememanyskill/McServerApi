@@ -44,7 +44,7 @@ public class Maps : ControllerBase
         if (!System.IO.File.Exists(Path.Join(map.Path, "resources.zip")))
             return NotFound();
         
-        return File(System.IO.File.ReadAllBytes(Path.Join(map.Path, "resources.zip")), "application/zip", "resources.zip");
+        return File(System.IO.File.ReadAllBytes(Path.Join(map.Path, "resources.zip")), "application/zip", $"{map.Name}.zip");
     }
 
     [HttpPost]
