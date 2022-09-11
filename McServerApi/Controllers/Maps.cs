@@ -11,6 +11,7 @@ public class Maps : ControllerBase
 {
     private Storage _storage;
     private static string WORKDIR = "__mc_maps";
+    private static string DELDIR = "__del_mc_maps";
     public List<MapTemplate> MapTemplates => _storage.Maps;
     public CurrentConfiguration Configuration => _storage.CurrentConfiguration;
     
@@ -45,25 +46,48 @@ public class Maps : ControllerBase
         _storage.Save();
     }
 
+    [HttpPost("new")]
+    public void New(MapsNewPost post)
+    {
+        MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion);
+        Directory.CreateDirectory(template.Path);
+        MapTemplates.Add(template);
+        _storage.Save();
+    }
+
+    [HttpDelete("{map_name}")]
+    public void Delete(string map_name)
+    {
+        MapTemplate? template = MapTemplates.Find(x => x.Name == map_name);
+
+        if (template == null)
+        {
+            Response.StatusCode = 404;
+            return;
+        }
+
+        Directory.CreateDirectory(DELDIR);
+        
+        string oldPath = template.Path;
+        string newPath = Path.Join(DELDIR, $"{Path.GetFileName(template.Path)}_{Path.GetRandomFileName()}");
+        
+        Directory.Move(oldPath, newPath);
+        MapTemplates.Remove(template);
+        _storage.Save();
+    }
+
     [HttpPost("{map_name}")]
     [DisableRequestSizeLimit]
     public void Create(string map_name, IFormFile file, string suggested_mc_version = "unk")
     {
+        MapTemplate template = CreateTemplate(map_name, suggested_mc_version);
+        
         if (file.Length > 0x10000000)
             throw new Exception("File size is over 256mb");
         
         if (!file.FileName.EndsWith(".zip"))
             throw new Exception("File is not a zip file");
 
-        if (Path.GetInvalidFileNameChars().Any(map_name.Contains))
-            throw new Exception("Invalid map name");
-
-        if (suggested_mc_version != "unk")
-        {
-            if (_storage.Servers.All(x => x.Version != suggested_mc_version))
-                throw new Exception("Invalid suggested mc version");
-        }
-        
         string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         Directory.CreateDirectory(tempDirectory);
 
@@ -83,15 +107,35 @@ public class Maps : ControllerBase
         else
         {
             Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(WORKDIR, map_name), true);
-            MapTemplates.Add(new()
-            {
-                Name = map_name,
-                MinecraftVersion = suggested_mc_version,
-                Path = Path.Join(WORKDIR, map_name)
-            });
+            MapTemplates.Add(template);
             _storage.Save();
         }
         
         Directory.Delete(tempDirectory, true);
+    }
+
+    private MapTemplate CreateTemplate(string name, string version)
+    {
+        if (name == null || version == null)
+            throw new Exception("Parameters are null");
+        
+        if (Path.GetInvalidFileNameChars().Any(name.Contains))
+            throw new Exception("Invalid map name");
+
+        if (MapTemplates.Any(x => x.Name == name))
+            throw new Exception("Map name already exists");
+        
+        if (version != "unk")
+        {
+            if (_storage.Servers.All(x => x.Version != version))
+                throw new Exception("Invalid suggested mc version");
+        }
+
+        return new()
+        {
+            Name = name,
+            MinecraftVersion = version,
+            Path = Path.Join(WORKDIR, name)
+        };
     }
 }

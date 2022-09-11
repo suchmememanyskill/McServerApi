@@ -6,9 +6,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3a97fe1-5f8e-4df1-bb0e-a2058cb5fa1b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/McServerApi/Model/MapsNewPost.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.McServerApi/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/McServerApi/Controllers/Maps.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Controllers/Maps.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Model/ServerTemplate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/McServerApi/Services/Server.cs" beforeDir="false" afterPath="$PROJECT_DIR$/McServerApi/Services/Server.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,7 @@
       <workItem from="1662805700667" duration="10082000" />
       <workItem from="1662829034123" duration="8386000" />
       <workItem from="1662839464708" duration="1037000" />
-      <workItem from="1662847156767" duration="370000" />
+      <workItem from="1662847156767" duration="4895000" />
     </task>
     <servers />
   </component>
@@ -108,30 +109,30 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/McServerApi/Controllers/Config.cs</url>
-          <line>41</line>
-          <properties documentPath="E:\Dev\McServerApi\McServerApi\Controllers\Config.cs" initialLine="41" containingFunctionPresentation="method 'State'">
-            <startOffsets>
-              <option value="943" />
-            </startOffsets>
-            <endOffsets>
-              <option value="984" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/McServerApi/Services/Server.cs</url>
-          <line>119</line>
+          <line>128</line>
           <properties documentPath="E:\Dev\McServerApi\McServerApi\Services\Server.cs" initialLine="104" containingFunctionPresentation="method 'Stop'">
             <startOffsets>
-              <option value="3630" />
+              <option value="4006" />
             </startOffsets>
             <endOffsets>
-              <option value="3663" />
+              <option value="4039" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/McServerApi/Controllers/Maps.cs</url>
+          <line>41</line>
+          <properties documentPath="E:\Dev\McServerApi\McServerApi\Controllers\Maps.cs" initialLine="40" containingFunctionPresentation="method 'Set'">
+            <startOffsets>
+              <option value="1110" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1159" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

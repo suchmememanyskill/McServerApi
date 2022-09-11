@@ -44,7 +44,7 @@ public class Server
         MapTemplate? mcServerMap = _storage.Maps.Find(x => x.Name == _storage.CurrentConfiguration.MapName);
         JavaTemplate? mcServerJava = _storage.Javas.Find(x => x.Version == (mcServerJar?.JavaVersion ?? "_"));
 
-        if (mcServerJar == null || mcServerJava == null)
+        if (mcServerJar == null || mcServerJava == null || (mcServerMap == null && _storage.CurrentConfiguration.MapName != "unk"))
         {
             Log("Invalid configuration");
             Status = ServerStatus.Dead;
@@ -54,6 +54,15 @@ public class Server
         if (!string.IsNullOrWhiteSpace(mcServerJar.AbsoluteServerPath))
         {
             Launch(mcServerJar.AbsoluteServerPath, mcServerJava);
+            return;
+        }
+
+        string expectedMapMcVersion = mcServerMap?.MinecraftVersion ?? "unk";
+
+        if (expectedMapMcVersion != "unk" && expectedMapMcVersion != mcServerJar.Version)
+        {
+            Log("Invalid map for server version");
+            Status = ServerStatus.Dead;
             return;
         }
         
