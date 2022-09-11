@@ -127,8 +127,13 @@ public class Maps : ControllerBase
         
         if (version != "unk")
         {
-            if (_storage.Servers.All(x => x.Version != version))
+            ServerTemplate? server = _storage.Servers.Find(x => x.Version == version);
+            
+            if (server == null)
                 throw new Exception("Invalid suggested mc version");
+
+            if (!server.UsesMaps)
+                throw new Exception("Provided server does not use maps");
         }
 
         return new()
