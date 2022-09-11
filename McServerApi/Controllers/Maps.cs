@@ -78,6 +78,7 @@ public class Maps : ControllerBase
 
     [HttpPost("{map_name}")]
     [DisableRequestSizeLimit]
+    [RequestFormLimits(MultipartBodyLengthLimit = 0x10000000)]
     public void Create(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
     {
         MapTemplate template = CreateTemplate(map_name, suggested_mc_version, read_only);
