@@ -22,14 +22,30 @@ public class Server
     private static string WORKDIR = "__mc_server";
     private static string TEMPLATEDIR = "__mc_server_template";
     public ServerStatus Status { get; private set; } = ServerStatus.Stopped;
+    public List<string> OnlinePlayers { get; private set; } = new();
+    public event Action<ServerStatus> OnStatusChange;
 
     public Server(Storage storage)
     {
         _storage = storage;
-        _terminal.OnNewLine += (terminal, s) =>
+
+        OnStatusChange += x =>
         {
-            if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?") || s.Contains("[minecraft/DedicatedServer]: Done ("))
-                Status = ServerStatus.Ready;
+            if (x == ServerStatus.Ready)
+            {
+                _terminal.OnNewLine -= MonitorStatusToReady;
+
+                _terminal.OnNewLine -= MonitorPlayerList;
+                _terminal.OnNewLine += MonitorPlayerList;
+            }
+            else
+            {
+                OnlinePlayers = new();
+                _terminal.OnNewLine -= MonitorStatusToReady;
+                _terminal.OnNewLine += MonitorStatusToReady;
+
+                _terminal.OnNewLine -= MonitorPlayerList;
+            }
         };
     }
 
@@ -38,16 +54,16 @@ public class Server
         if (!(Status is ServerStatus.Stopped or ServerStatus.Dead))
             return;
         
-        Status = ServerStatus.Initialising;
+        ChangeStatus(ServerStatus.Initialising);
         
         ServerTemplate? mcServerJar = _storage.Servers.Find(x => x.Version == _storage.CurrentConfiguration.ServerVersion);
         MapTemplate? mcServerMap = _storage.Maps.Find(x => x.Name == _storage.CurrentConfiguration.MapName);
         JavaTemplate? mcServerJava = _storage.Javas.Find(x => x.Version == (mcServerJar?.JavaVersion ?? "_"));
 
-        if (mcServerJar == null || mcServerJava == null || (mcServerMap == null && _storage.CurrentConfiguration.MapName != "unk"))
+        if (mcServerJar == null || mcServerJava == null || (mcServerMap == null && _storage.CurrentConfiguration.MapName != ""))
         {
             Log("Invalid configuration");
-            Status = ServerStatus.Dead;
+            ChangeStatus(ServerStatus.Dead);
             return;
         }
 
@@ -62,7 +78,7 @@ public class Server
         if (expectedMapMcVersion != "unk" && expectedMapMcVersion != mcServerJar.Version)
         {
             Log("Invalid map for server version");
-            Status = ServerStatus.Dead;
+            ChangeStatus(ServerStatus.Dead);
             return;
         }
         
@@ -82,7 +98,7 @@ public class Server
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 Log("Invalid server url");
-                Status = ServerStatus.Dead;
+                ChangeStatus(ServerStatus.Dead);
                 return;
             }
 
@@ -101,7 +117,7 @@ public class Server
             if (!Directory.Exists(mcServerMap.Path))
             {
                 Console.WriteLine("Invalid map");
-                Status = ServerStatus.Dead;
+                ChangeStatus(ServerStatus.Dead);
                 return;
             }
 
@@ -114,14 +130,14 @@ public class Server
     public async void Launch(string workingDir, JavaTemplate java)
     {
         _terminal.WorkingDirectory = workingDir;
-        Status = ServerStatus.Started;
+        ChangeStatus(ServerStatus.Started);
         Log("Starting server");
         bool result = await _terminal.Exec(java.Path, "-Xmx8G -Xms1G -jar server.jar nogui");
 
         if (!result)
-            Status = ServerStatus.Dead;
+            ChangeStatus(ServerStatus.Dead);
         else
-            Status = (_terminal.ExitCode == 0) ? ServerStatus.Stopped : ServerStatus.Dead;
+            ChangeStatus((_terminal.ExitCode == 0) ? ServerStatus.Stopped : ServerStatus.Dead);
     }
 
     public void Stop()
@@ -129,9 +145,48 @@ public class Server
         if (Status != ServerStatus.Ready)
             return;
 
-        Status = ServerStatus.Stopping;
+        ChangeStatus(ServerStatus.Stopping);
         _terminal.WriteToStdIn("stop");
     }
 
+    private void RunCommand(string command)
+    {
+        if (Status != ServerStatus.Ready)
+            return;
+        
+        _terminal.WriteToStdIn(command);
+    }
+
+    private void MonitorStatusToReady(Terminal t, string s)
+    {
+        if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?") || s.Contains("[minecraft/DedicatedServer]: Done ("))
+            ChangeStatus(ServerStatus.Ready);
+    }
+    
+    private void MonitorPlayerList(Terminal t, string s)
+    {
+        if (s.Contains("joined the game"))
+        {
+            string[] split = s.Split("]:");
+
+            string username = split[1].Split("joined")[0].Trim();
+            
+            if (!OnlinePlayers.Contains(username))
+                OnlinePlayers.Add(username);
+        }
+
+        if (s.Contains("left the game"))
+        {
+            string[] split = s.Split("]:");
+            OnlinePlayers.Remove(split[1].Split("left")[0].Trim());
+        }
+    }
+
     public void Log(string msg) => Console.WriteLine($"[Server] {msg}");
+
+    private void ChangeStatus(ServerStatus status)
+    {
+        Status = status;
+        OnStatusChange?.Invoke(status);
+    }
 }

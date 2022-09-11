@@ -13,4 +13,7 @@ public class CurrentConfiguration
 
     [Newtonsoft.Json.JsonIgnore] 
     public string TextStatus => Server?.Status.ToString() ?? "";
+
+    [Newtonsoft.Json.JsonIgnore] 
+    public List<string> OnlinePlayers => Server?.OnlinePlayers ?? new();
 }
