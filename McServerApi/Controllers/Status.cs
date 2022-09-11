@@ -27,6 +27,8 @@ public class Status : ControllerBase
     [HttpPost("state")]
     public string State(StatusStatePost data)
     {
+        string url = $"{Request.Scheme}://{Request.Host.Value}";
+        
         if (data.Status)
         {
             if (!(_server.Status is ServerStatus.Stopped or ServerStatus.Dead))
@@ -34,7 +36,7 @@ public class Status : ControllerBase
                 Response.StatusCode = 409;
                 return "Server is already active";
             }
-            _server.Start();
+            _server.Start(url);
         }
         else
         {

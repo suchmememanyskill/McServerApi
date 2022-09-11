@@ -1,6 +1,7 @@
 ﻿using System.IO.Compression;
 using McServerApi.Model;
 using McServerApi.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace McServerApi.Controllers;
@@ -24,6 +25,19 @@ public class Maps : ControllerBase
     public IEnumerable<MapTemplate> Get()
     {
         return MapTemplates;
+    }
+
+    [HttpGet("resources/{map_name}")]
+    public ActionResult GetResources(string map_name)
+    {
+        var map = MapTemplates.Find(x => x.Name == map_name);
+        if (map == null)
+            return NotFound();
+        
+        if (!System.IO.File.Exists(Path.Join(map.Path, "resources.zip")))
+            return NotFound();
+        
+        return File(System.IO.File.ReadAllBytes(Path.Join(map.Path, "resources.zip")), "application/zip", "resources.zip");
     }
 
     [HttpPost]

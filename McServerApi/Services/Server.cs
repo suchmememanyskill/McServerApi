@@ -49,7 +49,7 @@ public class Server
         };
     }
 
-    public async void Start()
+    public async void Start(string baseUrl)
     {
         if (!(Status is ServerStatus.Stopped or ServerStatus.Dead))
             return;
@@ -90,7 +90,17 @@ public class Server
         
         Log("Creating new directory");
         Utils.CopyDirectory(TEMPLATEDIR, WORKDIR, true);
-        
+
+        // Hack. Unsure how to get around minecraft's aggressive caching otherwise
+        string propertiesPath = Path.Join(WORKDIR, "server.properties");
+        if (File.Exists(propertiesPath))
+        {
+            string content = await File.ReadAllTextAsync(propertiesPath);
+            content = content.Replace("{{RESOURCE_URL}}",
+                (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{mcServerMap.Name}" : "");
+            await File.WriteAllTextAsync(propertiesPath, content);
+        }
+
         Log("Downloading new .jar");
         using (HttpClient client = new())
         {
