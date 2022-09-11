@@ -128,15 +128,13 @@ public class Maps : ControllerBase
 
         if (!Directory.Exists(Path.Join(tempDirectory, "world")))
         {
-            Response.StatusCode = 400;
+            Directory.Delete(tempDirectory, true);
+            throw new Exception("Zip does not contain a world folder");
         }
-        else
-        {
-            Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(WORKDIR, map_name), true);
-            MapTemplates.Add(template);
-            _storage.Save();
-        }
-        
+
+        Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(WORKDIR, map_name), true);
+        MapTemplates.Add(template);
+        _storage.Save(); 
         Directory.Delete(tempDirectory, true);
     }
 
