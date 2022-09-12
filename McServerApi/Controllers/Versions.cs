@@ -23,7 +23,7 @@ public class Versions : ControllerBase
         return Servers;
     }
 
-    [HttpPost]
+    [HttpPut]
     public string Set(VersionPost data)
     {
         ServerTemplate? find = Servers.Find(x => x.Version == data.Version);

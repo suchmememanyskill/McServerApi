@@ -24,7 +24,7 @@ public class Status : ControllerBase
         return new(_storage, _server);
     }
 
-    [HttpPost("state")]
+    [HttpPut("state")]
     public string State(StatusStatePost data)
     {
         string url = $"{Request.Scheme}://{Request.Host.Value}";

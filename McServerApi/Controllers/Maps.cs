@@ -47,7 +47,7 @@ public class Maps : ControllerBase
         return File(System.IO.File.ReadAllBytes(Path.Join(map.Path, "resources.zip")), "application/zip", $"{map.Name}.zip");
     }
 
-    [HttpPost]
+    [HttpPut]
     public string Set(MapsPost data)
     {
         if (MapTemplates.All(x => x.Name != data.MapName) && data.MapName != "")
@@ -68,7 +68,7 @@ public class Maps : ControllerBase
         return "OK";
     }
 
-    [HttpPost("{map_name}/version")]
+    [HttpPut("{map_name}/version")]
     public string ChangeVersion(string map_name, MapNameVersionPost data)
     {
         MapTemplate? template = MapTemplates.Find(x => x.Name == map_name);
