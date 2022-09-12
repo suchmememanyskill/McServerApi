@@ -52,6 +52,6 @@ public class JarCache
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             File.Copy(cachePath, dstPath);
         else
-            File.CreateSymbolicLink(dstPath, cachePath);
+            File.CreateSymbolicLink(dstPath, Path.GetFullPath(cachePath));
     }
 }
