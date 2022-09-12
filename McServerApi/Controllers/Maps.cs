@@ -98,8 +98,12 @@ public class Maps : ControllerBase
             Response.StatusCode = 404;
             return "Specified version does not support maps";
         }
-
+        
         template.MinecraftVersion = server.Version;
+
+        if (_storage.CurrentConfiguration.MapName == template.Name)
+            _storage.CurrentConfiguration.ServerVersion = server.Version;
+
         _storage.Save();
         return "OK";
     }
