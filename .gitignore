@@ -403,3 +403,4 @@ FodyWeavers.xsd
 /McServerApi/__del_mc_maps
 McServerApi/DEBUG
 /.idea
+McServerApi/__jar_cache/

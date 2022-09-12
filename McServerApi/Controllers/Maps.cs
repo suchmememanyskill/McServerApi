@@ -68,6 +68,42 @@ public class Maps : ControllerBase
         return "OK";
     }
 
+    [HttpPost("{map_name}/version")]
+    public string ChangeVersion(string map_name, MapNameVersionPost data)
+    {
+        MapTemplate? template = MapTemplates.Find(x => x.Name == map_name);
+
+        if (template == null)
+        {
+            Response.StatusCode = 404;
+            return "Could not find map";
+        }
+
+        if (data.Version == "unk")
+        {
+            template.MinecraftVersion = "unk";
+            _storage.Save();
+            return "OK";
+        }
+        
+        var server = _storage.Servers.Find(x => x.Version == data.Version);
+        if (server == null)
+        {
+            Response.StatusCode = 404;
+            return "Could not find version";
+        }
+
+        if (!server.UsesMaps)
+        {
+            Response.StatusCode = 404;
+            return "Specified version does not support maps";
+        }
+
+        template.MinecraftVersion = server.Version;
+        _storage.Save();
+        return "OK";
+    }
+
     [HttpPost("new")]
     public string New(MapsNewPost post)
     {

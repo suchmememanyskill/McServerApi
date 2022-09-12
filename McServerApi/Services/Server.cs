@@ -20,15 +20,17 @@ public class Server
 {
     private Terminal _terminal = new();
     private Storage _storage;
+    private JarCache _cache;
     private static string WORKDIR = "__mc_server";
     private static string TEMPLATEDIR = "__mc_server_template";
     public ServerStatus Status { get; private set; } = ServerStatus.Stopped;
     public List<string> OnlinePlayers { get; private set; } = new();
     public event Action<ServerStatus> OnStatusChange;
 
-    public Server(Storage storage)
+    public Server(Storage storage, JarCache cache)
     {
         _storage = storage;
+        _cache = cache;
 
         OnStatusChange += x =>
         {
@@ -103,21 +105,7 @@ public class Server
         }
 
         Log("Downloading new .jar");
-        using (HttpClient client = new())
-        {
-            var response = await client.GetAsync(mcServerJar.Url);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                Log("Invalid server url");
-                ChangeStatus(ServerStatus.Dead);
-                return;
-            }
-
-            await using (var fs = new FileStream(Path.Join(WORKDIR, "server.jar"), FileMode.Create))
-            {
-                await response.Content.CopyToAsync(fs);
-            }
-        }
+        await _cache.RequestJar(Path.Join(WORKDIR, "server.jar"), mcServerJar);
 
         if (mcServerMap == null)
         {

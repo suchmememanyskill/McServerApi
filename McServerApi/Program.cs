@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<Storage>();
 builder.Services.AddSingleton<Server>();
+builder.Services.AddSingleton<JarCache>();
 
 var app = builder.Build();
 
