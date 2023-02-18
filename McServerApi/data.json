@@ -10,7 +10,7 @@
   "Javas": [
     {
       "Version":"latest",
-      "Path":"C:/Program Files/Eclipse Adoptium/jdk-17.0.4.101-hotspot/bin/java.exe"
+      "Path":"java"
     }
   ]
 }
