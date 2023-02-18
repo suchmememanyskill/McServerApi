@@ -35,7 +35,7 @@ public class Versions : ControllerBase
         }
 
         Config.ServerVersion = find.Version;
-        _storage.Save();
+        _storage.WriteConfiguration();
         return "OK";
     }
 }

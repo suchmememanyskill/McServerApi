@@ -43,7 +43,7 @@ public class Maps : ControllerBase
         
         if (!System.IO.File.Exists(Path.Join(map.Path, "resources.zip")))
             return NotFound();
-        
+
         return File(System.IO.File.ReadAllBytes(Path.Join(map.Path, "resources.zip")), "application/zip", $"{map.Name}.zip");
     }
 
@@ -64,48 +64,23 @@ public class Maps : ControllerBase
         }
 
         Configuration.MapName = data.MapName;
-        _storage.Save();
+        _storage.WriteConfiguration();
         return "OK";
     }
 
     [HttpPut("{map_name}/version")]
     public string ChangeVersion(string map_name, MapNameVersionPost data)
     {
-        MapTemplate? template = MapTemplates.Find(x => x.Name == map_name);
-
-        if (template == null)
+        try
         {
-            Response.StatusCode = 404;
-            return "Could not find map";
-        }
-
-        if (data.Version == "unk")
-        {
-            template.MinecraftVersion = "unk";
-            _storage.Save();
+            _storage.MapSetVersion(map_name, data.Version);
             return "OK";
         }
-        
-        var server = _storage.Servers.Find(x => x.Version == data.Version);
-        if (server == null)
+        catch (Exception e)
         {
-            Response.StatusCode = 404;
-            return "Could not find version";
+            Response.StatusCode = 400;
+            return e.Message;
         }
-
-        if (!server.UsesMaps)
-        {
-            Response.StatusCode = 404;
-            return "Specified version does not support maps";
-        }
-        
-        template.MinecraftVersion = server.Version;
-
-        if (_storage.CurrentConfiguration.MapName == template.Name)
-            _storage.CurrentConfiguration.ServerVersion = server.Version;
-
-        _storage.Save();
-        return "OK";
     }
 
     [HttpPost("new")]
@@ -113,10 +88,9 @@ public class Maps : ControllerBase
     {
         try
         {
-            MapTemplate template = CreateTemplate(post.Name, post.MinecraftVersion, false);
-            Directory.CreateDirectory(template.Path);
-            MapTemplates.Add(template);
-            _storage.Save();
+            ValidateMapInput(post.Name, post.MinecraftVersion);
+            Directory.CreateDirectory(post.Name);
+            _storage.MapSetVersion(post.Name, post.MinecraftVersion);
             return "OK";
         }
         catch (Exception e)
@@ -143,8 +117,7 @@ public class Maps : ControllerBase
         string newPath = Path.Join(DELDIR, $"{Path.GetFileName(template.Path)}_{Path.GetRandomFileName()}");
         
         Directory.Move(oldPath, newPath);
-        MapTemplates.Remove(template);
-        _storage.Save();
+        _storage.Reload();
         return "OK";
     }
 
@@ -167,7 +140,7 @@ public class Maps : ControllerBase
 
     private void CreateActual(string map_name, IFormFile file, string suggested_mc_version = "unk", bool read_only = false)
     {
-        MapTemplate template = CreateTemplate(map_name, suggested_mc_version, read_only);
+        ValidateMapInput(map_name, suggested_mc_version);
         
         if (file.Length > 0x10000000)
             throw new Exception("File size is over 256mb");
@@ -194,12 +167,13 @@ public class Maps : ControllerBase
         }
 
         Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(WORKDIR, map_name), true);
-        MapTemplates.Add(template);
-        _storage.Save(); 
+        
+        _storage.MapSetVersion(map_name, suggested_mc_version);
+        _storage.MapSetReadOnly(map_name, read_only);
         Directory.Delete(tempDirectory, true);
     }
 
-    private MapTemplate CreateTemplate(string name, string version, bool readOnly)
+    private void ValidateMapInput(string name, string version)
     {
         if (name == null || version == null)
             throw new Exception("Parameters are null");
@@ -220,13 +194,5 @@ public class Maps : ControllerBase
             if (!server.UsesMaps)
                 throw new Exception("Provided server does not use maps");
         }
-
-        return new()
-        {
-            Name = name,
-            MinecraftVersion = version,
-            Path = Path.Join(WORKDIR, name),
-            ReadOnly = readOnly
-        };
     }
 }

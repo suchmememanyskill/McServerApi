@@ -1,0 +1,16 @@
+﻿{
+  "Servers": [
+    {
+      "Version":"1.19.2",
+      "JavaVersion":"latest",
+      "Url":"https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar",
+      "AbsoluteServerPath":""
+    }
+  ],
+  "Javas": [
+    {
+      "Version":"latest",
+      "Path":"C:/Program Files/Eclipse Adoptium/jdk-17.0.4.101-hotspot/bin/java.exe"
+    }
+  ]
+}

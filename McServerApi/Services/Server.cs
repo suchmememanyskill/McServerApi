@@ -21,16 +21,18 @@ public class Server
     private Terminal _terminal = new();
     private Storage _storage;
     private JarCache _cache;
+    private AppConfiguration _config;
     private static string WORKDIR = "__mc_server";
     private static string TEMPLATEDIR = "__mc_server_template";
     public ServerStatus Status { get; private set; } = ServerStatus.Stopped;
     public List<string> OnlinePlayers { get; private set; } = new();
     public event Action<ServerStatus> OnStatusChange;
 
-    public Server(Storage storage, JarCache cache)
+    public Server(Storage storage, JarCache cache, AppConfiguration config)
     {
         _storage = storage;
         _cache = cache;
+        _config = config;
 
         OnStatusChange += x =>
         {
@@ -105,7 +107,7 @@ public class Server
         }
 
         Log("Downloading new .jar");
-        await _cache.RequestJar(Path.Join(WORKDIR, "server.jar"), mcServerJar);
+        await _cache.RequestJar(Path.Join(WORKDIR, "server.jar"), mcServerJar); // TODO: Replace with just workdir to implement 'proper' modded support
 
         if (mcServerMap == null)
         {
@@ -140,7 +142,7 @@ public class Server
         _terminal.WorkingDirectory = workingDir;
         ChangeStatus(ServerStatus.Started);
         Log("Starting server");
-        bool result = await _terminal.Exec(java.Path, "-Xmx8G -Xms1G -jar server.jar nogui");
+        bool result = await _terminal.Exec(java.Path, $"-Xmx{_config.MemoryInGb}G -Xms{_config.MemoryInGb}G {_config.JavaFlags} -jar server.jar nogui");
 
         if (!result)
             ChangeStatus(ServerStatus.Dead);

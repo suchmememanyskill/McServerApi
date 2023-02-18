@@ -5,7 +5,7 @@ namespace McServerApi.Model;
 public class ServerTemplate
 {
     public string Version { get; set; } = "1.0.0";
-    public string JavaVersion { get; set; } = "8";
+    public string JavaVersion { get; set; } = "latest";
     [JsonIgnore]
     public bool UsesMaps => !string.IsNullOrWhiteSpace(Url);
     [System.Text.Json.Serialization.JsonIgnore]
