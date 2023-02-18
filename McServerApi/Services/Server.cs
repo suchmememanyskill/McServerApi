@@ -23,7 +23,6 @@ public class Server
     private JarCache _cache;
     private AppConfiguration _config;
     private static string WORKDIR = "__mc_server";
-    private static string TEMPLATEDIR = "__mc_server_template";
     public ServerStatus Status { get; private set; } = ServerStatus.Stopped;
     public List<string> OnlinePlayers { get; private set; } = new();
     public event Action<ServerStatus> OnStatusChange;
@@ -94,7 +93,7 @@ public class Server
         }
         
         Log("Creating new directory");
-        Utils.CopyDirectory(TEMPLATEDIR, WORKDIR, true);
+        Utils.CopyDirectory(Storage.TEMPLATEDIR, WORKDIR, true);
 
         // Hack. Unsure how to get around minecraft's aggressive caching otherwise
         string propertiesPath = Path.Join(WORKDIR, "server.properties");

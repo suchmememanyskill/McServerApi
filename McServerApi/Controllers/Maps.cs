@@ -12,8 +12,6 @@ namespace McServerApi.Controllers;
 public class Maps : ControllerBase
 {
     private Storage _storage;
-    private static string WORKDIR = "__mc_maps";
-    private static string DELDIR = "__del_mc_maps";
     public List<MapTemplate> MapTemplates => _storage.Maps;
     public CurrentConfiguration Configuration => _storage.CurrentConfiguration;
     
@@ -89,7 +87,7 @@ public class Maps : ControllerBase
         try
         {
             ValidateMapInput(post.Name, post.MinecraftVersion);
-            Directory.CreateDirectory(post.Name);
+            Directory.CreateDirectory(Path.Join(Storage.MAPSDIR, post.Name));
             _storage.MapSetVersion(post.Name, post.MinecraftVersion);
             return "OK";
         }
@@ -111,10 +109,10 @@ public class Maps : ControllerBase
             return "Could not find map";
         }
 
-        Directory.CreateDirectory(DELDIR);
+        Directory.CreateDirectory(Storage.DELETEDMAPSDIR);
         
         string oldPath = template.Path;
-        string newPath = Path.Join(DELDIR, $"{Path.GetFileName(template.Path)}_{Path.GetRandomFileName()}");
+        string newPath = Path.Join(Storage.DELETEDMAPSDIR, $"{Path.GetFileName(template.Path)}_{Path.GetRandomFileName()}");
         
         Directory.Move(oldPath, newPath);
         _storage.Reload();
@@ -166,7 +164,7 @@ public class Maps : ControllerBase
             throw new Exception("Zip does not contain a world folder");
         }
 
-        Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(WORKDIR, map_name), true);
+        Utils.CopyDirectory(Path.Join(tempDirectory, "world"), Path.Join(Storage.MAPSDIR, map_name), true);
         
         _storage.MapSetVersion(map_name, suggested_mc_version);
         _storage.MapSetReadOnly(map_name, read_only);

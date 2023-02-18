@@ -7,8 +7,7 @@ namespace McServerApi.Services;
 public class JarCache
 {
     private Storage _storage;
-    private static string CACHEDIR = "__jar_cache";
-    
+
     public JarCache(Storage storage)
     {
         _storage = storage;
@@ -26,10 +25,10 @@ public class JarCache
     public async Task RequestJar(string dstPath, ServerTemplate server)
     {
         string cacheName = $"{server.Version}.jar";
-        string cachePath = Path.Join(CACHEDIR, cacheName);
+        string cachePath = Path.Join(Storage.JARCACHEDIR, cacheName);
 
-        if (!Directory.Exists(CACHEDIR))
-            Directory.CreateDirectory(CACHEDIR);
+        if (!Directory.Exists(Storage.JARCACHEDIR))
+            Directory.CreateDirectory(Storage.JARCACHEDIR);
 
         if (!File.Exists(cachePath))
         {
