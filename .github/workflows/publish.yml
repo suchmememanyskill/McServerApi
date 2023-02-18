@@ -1,0 +1,23 @@
+name: publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up docker
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build the docker image
+      run: |
+        docker build . --tag ghcr.io/suchmememanyskill/mcserverapi:latest
+        docker push ghcr.io/suchmememanyskill/mcserverapi:latest

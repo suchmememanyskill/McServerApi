@@ -26,5 +26,5 @@ RUN apt install -y openjdk-17-jre-headless
 RUN apt clean
 
 ENV Config__ApiPort=8080
-EXPOSE 8080
+EXPOSE 8080 25565
 ENTRYPOINT ["dotnet", "McServerApi.dll"]
