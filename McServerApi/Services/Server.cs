@@ -159,19 +159,21 @@ public class Server
     {
         foreach (var savedPath in mappings)
         {
-            string srcPath = Path.Join(src, savedPath);
-            string dstPath = Path.GetFullPath(Path.Join(dst, savedPath));
+            bool file = savedPath.Replace("\\.", "").Contains('.');
+            string path = savedPath.Replace("\\.", ".");
+            string srcPath = Path.Join(src, path);
+            string dstPath = Path.GetFullPath(Path.Join(dst, path));
             
-            if (savedPath.Contains('/'))
+            if (path.Contains('/'))
             {
-                string filename = Path.GetFileName(savedPath);
-                string containingDirName = Path.GetDirectoryName(savedPath)!;
+                string filename = Path.GetFileName(path);
+                string containingDirName = Path.GetDirectoryName(path)!;
 
                 Directory.CreateDirectory(Path.Join(src, containingDirName));
                 dstPath = Path.GetFullPath(Path.Join(dst, filename));
             }
 
-            if (savedPath.Contains('.'))
+            if (file)
             {
                 if (File.Exists(dstPath))
                     File.CreateSymbolicLink(srcPath, dstPath);
@@ -188,16 +190,18 @@ public class Server
     {
         foreach (var savedPath in mappings)
         {
-            string srcPath = Path.Join(src, savedPath);
-            string dstPath = Path.GetFullPath(Path.Join(dst, savedPath));
+            bool file = savedPath.Replace("\\.", "").Contains('.');
+            string path = savedPath.Replace("\\.", ".");
+            string srcPath = Path.Join(src, path);
+            string dstPath = Path.GetFullPath(Path.Join(dst, path));
 
-            if (savedPath.Contains('/'))
+            if (path.Contains('/'))
             {
-                string filename = Path.GetFileName(savedPath);
+                string filename = Path.GetFileName(path);
                 dstPath = Path.GetFullPath(Path.Join(dst, filename));
             }
 
-            if (savedPath.Contains('.'))
+            if (file)
             {
                 if (!File.Exists(dstPath) && File.Exists(srcPath))
                     File.Copy(srcPath, dstPath);

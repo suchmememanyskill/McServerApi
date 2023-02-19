@@ -2,14 +2,12 @@
   "Servers": [
     {
       "Version":"1.19.2",
-      "JavaVersion":"latest",
       "Downloadables": {
         "server.jar": "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar"
       }
     },
     {
       "Version": "Paper 1.19.3",
-      "JavaVersion": "latest",
       "Mappings": [
         "world_nether",
         "world_the_end"
@@ -17,18 +15,29 @@
       "ServerMappings": [
         "cache",
         "config",
-        "libraries",
         "bukkit.yml",
         "commands.yml",
         "help.yml",
         "permissions.yml",
         "spigot.yml",
-        "plugins",
-        "versions"
+        "plugins"
       ],
       "Downloadables": {
         "server.jar": "https://api.papermc.io/v2/projects/paper/versions/1.19.3/builds/404/downloads/paper-1.19.3-404.jar"
       }
+    },
+    {
+      "Version": "Fabric 1.19.3",
+      "Downloadables": {
+        "server.jar": "https://meta.fabricmc.net/v2/versions/loader/1.19.3/0.14.14/0.11.1/server/jar",
+        "mods/starlight.jar": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar",
+        "mods/lithium.jar": "https://github.com/CaffeineMC/lithium-fabric/releases/download/mc1.19.3-0.10.4/lithium-fabric-mc1.19.3-0.10.4.jar"
+      },
+      "ServerMappings": [
+        "\\.fabric",
+        "mods",
+        "config"
+      ]
     }
   ],
   "Javas": [
