@@ -20,6 +20,7 @@ COPY --from=build /app ./
 RUN mkdir -p __mc_maps
 RUN mkdir -p __jar_cache
 RUN mkdir -p __del_mc_maps
+RUN mkdir -p __mc_server_mappings
 
 RUN apt update
 RUN apt install -y openjdk-17-jre-headless

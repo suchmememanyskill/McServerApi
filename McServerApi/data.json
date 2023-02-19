@@ -3,7 +3,22 @@
     {
       "Version":"1.19.2",
       "JavaVersion":"latest",
-      "Url":"https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar",
+      "Mappings": [],
+      "Downloadables": {
+        "server.jar": "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar"
+      },
+      "AbsoluteServerPath":""
+    },
+    {
+      "Version": "Paper 1.19.3",
+      "JavaVersion": "latest",
+      "Mappings": [
+        "world_nether",
+        "world_the_end"
+      ],
+      "Downloadables": {
+        "server.jar": "https://api.papermc.io/v2/projects/paper/versions/1.19.3/builds/404/downloads/paper-1.19.3-404.jar"
+      },
       "AbsoluteServerPath":""
     }
   ],

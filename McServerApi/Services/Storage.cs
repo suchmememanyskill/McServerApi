@@ -18,6 +18,7 @@ public class Storage
     public static string JARCACHEDIR = "__jar_cache";
     public static string MAPSDIR = "__mc_maps";
     public static string TEMPLATEDIR = "__mc_server_template";
+    public static string SERVERMAPPINGSDIR = "__mc_server_mappings";
 
     public Storage()
     {

@@ -73,7 +73,7 @@ public class Server
 
         if (!string.IsNullOrWhiteSpace(mcServerJar.AbsoluteServerPath))
         {
-            Launch(mcServerJar.AbsoluteServerPath, mcServerJava);
+            await Launch(mcServerJar.AbsoluteServerPath, mcServerJava);
             return;
         }
 
@@ -104,10 +104,7 @@ public class Server
                 (mcServerMap?.HasResourcePack ?? false) ? $"{baseUrl}/Maps/resources/{HttpUtility.UrlEncode(mcServerMap.Name)}".Replace(":", "\\:") : "");
             await File.WriteAllTextAsync(propertiesPath, content);
         }
-
-        Log("Downloading new .jar");
-        await _cache.RequestJar(Path.Join(WORKDIR, "server.jar"), mcServerJar); // TODO: Replace with just workdir to implement 'proper' modded support
-
+        
         if (mcServerMap == null)
         {
             Log("Map not found, not creating symlink");
@@ -129,14 +126,61 @@ public class Server
             else
             {
                 Log("Creating symlink for map");
-                File.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
+                Directory.CreateSymbolicLink(Path.Join(WORKDIR, "world"), Path.GetFullPath(mcServerMap.Path));
             }
         }
+
+        if (mcServerJar.Mappings.Count > 0)
+        {
+            Directory.CreateDirectory(Path.Join(WORKDIR, "world", "__saved"));
+            Map(WORKDIR, Path.Join(WORKDIR, "world", "__saved"), mcServerJar.Mappings);
+        }
+
+        if (mcServerJar.ServerMappings.Count > 0)
+        {
+            Directory.CreateDirectory(Path.Join(Storage.SERVERMAPPINGSDIR, mcServerJar.Version));
+            Map(WORKDIR, Path.Join(Storage.SERVERMAPPINGSDIR, mcServerJar.Version), mcServerJar.ServerMappings);
+        }
         
-        Launch(WORKDIR, mcServerJava);
+        Log("Downloading new .jar");
+        await _cache.RequestJars(WORKDIR, mcServerJar);
+        await Launch(WORKDIR, mcServerJava);
+        await _cache.DeleteJars(WORKDIR, mcServerJar);
     }
 
-    public async void Launch(string workingDir, JavaTemplate java)
+    // Folders get mapped from src -> dst
+    private void Map(string src, string dst, List<string> mappings)
+    {
+        foreach (var savedPath in mappings)
+        {
+            string srcPath = Path.Join(src, savedPath);
+            string dstPath = Path.GetFullPath(Path.Join(dst, savedPath));
+            
+            if (savedPath.Contains('/'))
+            {
+                string filename = Path.GetFileName(savedPath);
+                string containingDirName = Path.GetDirectoryName(savedPath)!;
+
+                Directory.CreateDirectory(Path.Join(src, containingDirName));
+                dstPath = Path.GetFullPath(Path.Join(dst, filename));
+            }
+
+            if (savedPath.Contains('.'))
+            {
+                if (!File.Exists(dstPath))
+                    File.WriteAllText(dstPath, "");
+
+                File.CreateSymbolicLink(srcPath, dstPath);
+            }
+            else
+            {
+                Directory.CreateDirectory(dstPath);
+                Directory.CreateSymbolicLink(srcPath, dstPath);
+            }
+        }
+    }
+
+    public async Task Launch(string workingDir, JavaTemplate java)
     {
         _terminal.WorkingDirectory = workingDir;
         ChangeStatus(ServerStatus.Started);
@@ -168,7 +212,7 @@ public class Server
 
     private void MonitorStatusToReady(Terminal t, string s)
     {
-        if (s.Contains("[Server thread/INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?") || s.Contains("[minecraft/DedicatedServer]: Done ("))
+        if (s.Contains("INFO]: Done (") || s.Contains("Can't keep up! Did the system time change, or is the server overloaded?") || s.Contains("[minecraft/DedicatedServer]: Done ("))
             ChangeStatus(ServerStatus.Ready);
     }
     

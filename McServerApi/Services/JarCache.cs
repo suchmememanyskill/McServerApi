@@ -13,18 +13,39 @@ public class JarCache
         _storage = storage;
     }
 
-    public async Task RequestJar(string dstPath, string version)
+    public async Task RequestJars(string workdir, string version)
     {
         var server = _storage.Servers.Find(x => x.Version == version);
         if (server == null)
             throw new ArgumentException("Version not found");
 
-        await RequestJar(dstPath, server);
+        await RequestJars(workdir, server);
+    }
+
+    public async Task RequestJars(string workdir, ServerTemplate server)
+    {
+        foreach (var (key, value) in server.Downloadables)
+        {
+            await RequestJar(Path.Join(workdir, key), value);
+        }
+    }
+
+    public async Task DeleteJars(string workdir, ServerTemplate server)
+    {
+        foreach (var (key, value) in server.Downloadables)
+        {
+            string path = Path.Join(workdir, key);
+            
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     }
     
-    public async Task RequestJar(string dstPath, ServerTemplate server)
+    private async Task RequestJar(string path, string url)
     {
-        string cacheName = $"{server.Version}.jar";
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        
+        string cacheName = Utils.CreateMD5(url);
         string cachePath = Path.Join(Storage.JARCACHEDIR, cacheName);
 
         if (!Directory.Exists(Storage.JARCACHEDIR))
@@ -34,7 +55,7 @@ public class JarCache
         {
             using (HttpClient client = new())
             {
-                var response = await client.GetAsync(server.Url);
+                var response = await client.GetAsync(url);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     throw new Exception("Invalid server url");
@@ -46,11 +67,7 @@ public class JarCache
                 }
             }
         }
-
-        // Symlinks aren't supported on windows
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            File.Copy(cachePath, dstPath);
-        else
-            File.CreateSymbolicLink(dstPath, Path.GetFullPath(cachePath));
+        
+        File.CreateSymbolicLink(path, Path.GetFullPath(cachePath));
     }
 }

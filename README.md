@@ -35,3 +35,7 @@ Map storage. Used to store current available maps, configuration for additional 
 **app/__mc_server_template**
 
 Server template. When a server is turned on, this folder is copied in as a base. By default this contains `server.properties`, `ops.json` and `eula.txt`. Feel free to specifically override those files also
+
+**app/__mc_server_mappings**
+
+Contains folders and files saved on a server/profile wide level
