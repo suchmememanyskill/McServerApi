@@ -146,6 +146,12 @@ public class Server
         await _cache.RequestJars(WORKDIR, mcServerJar);
         await Launch(WORKDIR, mcServerJava);
         await _cache.DeleteJars(WORKDIR, mcServerJar);
+        
+        if (mcServerJar.Mappings.Count > 0)
+            SaveUnmappedFiles(WORKDIR, Path.Join(WORKDIR, "world", "__saved"), mcServerJar.Mappings);
+        
+        if (mcServerJar.ServerMappings.Count > 0)
+            SaveUnmappedFiles(WORKDIR, Path.Join(Storage.SERVERMAPPINGSDIR, mcServerJar.Version), mcServerJar.ServerMappings);
     }
 
     // Folders get mapped from src -> dst
@@ -167,15 +173,39 @@ public class Server
 
             if (savedPath.Contains('.'))
             {
-                if (!File.Exists(dstPath))
-                    File.WriteAllText(dstPath, "");
-
-                File.CreateSymbolicLink(srcPath, dstPath);
+                if (File.Exists(dstPath))
+                    File.CreateSymbolicLink(srcPath, dstPath);
             }
             else
             {
-                Directory.CreateDirectory(dstPath);
-                Directory.CreateSymbolicLink(srcPath, dstPath);
+                if (Directory.Exists(dstPath))
+                    Directory.CreateSymbolicLink(srcPath, dstPath);
+            }
+        }
+    }
+
+    private void SaveUnmappedFiles(string src, string dst, List<string> mappings)
+    {
+        foreach (var savedPath in mappings)
+        {
+            string srcPath = Path.Join(src, savedPath);
+            string dstPath = Path.GetFullPath(Path.Join(dst, savedPath));
+
+            if (savedPath.Contains('/'))
+            {
+                string filename = Path.GetFileName(savedPath);
+                dstPath = Path.GetFullPath(Path.Join(dst, filename));
+            }
+
+            if (savedPath.Contains('.'))
+            {
+                if (!File.Exists(dstPath) && File.Exists(srcPath))
+                    File.Copy(srcPath, dstPath);
+            }
+            else
+            {
+                if (!Directory.Exists(dstPath) && Directory.Exists(srcPath))
+                    Utils.CopyDirectory(srcPath, dstPath, true);
             }
         }
     }
