@@ -1,9 +1,15 @@
 ﻿{
   "Servers": [
     {
-      "Version":"1.19.2",
+      "Version":"Vanilla 1.19.3",
       "Downloadables": {
-        "server.jar": "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar"
+        "server.jar": "https://piston-data.mojang.com/v1/objects/c9df48efed58511cdd0213c56b9013a7b5c9ac1f/server.jar"
+      }
+    },
+    {
+      "Version":"Vanilla 1.12.2",
+      "Downloadables": {
+        "server.jar": "https://launcher.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar"
       }
     },
     {
