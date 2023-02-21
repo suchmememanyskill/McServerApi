@@ -114,7 +114,8 @@ public class Maps : ControllerBase
         string oldPath = template.Path;
         string newPath = Path.Join(Storage.DELETEDMAPSDIR, $"{Path.GetFileName(template.Path)}_{Path.GetRandomFileName()}");
         
-        Directory.Move(oldPath, newPath);
+        Utils.CopyDirectory(oldPath, newPath, true);
+        Directory.Delete(oldPath, true);
         _storage.Reload();
         return "OK";
     }
