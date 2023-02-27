@@ -219,7 +219,7 @@ public class Server
         _terminal.WorkingDirectory = workingDir;
         ChangeStatus(ServerStatus.Started);
         Log("Starting server");
-        bool result = await _terminal.Exec(java.Path, $"-Xmx{_config.MemoryInGb}G {_config.JavaFlags} -jar server.jar nogui");
+        bool result = await _terminal.Exec(java.Path, $"-Xmx{_config.MemoryInGb}G -Xms{_config.MemoryInGb}G {_config.JavaFlags} -jar server.jar nogui");
 
         if (!result)
             ChangeStatus(ServerStatus.Dead);
