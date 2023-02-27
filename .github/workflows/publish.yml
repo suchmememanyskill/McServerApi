@@ -21,3 +21,35 @@ jobs:
       run: |
         docker build . --tag ghcr.io/suchmememanyskill/mcserverapi:latest
         docker push ghcr.io/suchmememanyskill/mcserverapi:latest
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: |
+        cd McServerApi
+        dotnet publish -c release -o Build
+        
+    - name: Zip Build
+      uses: edgarrc/action-7z@v1
+      with:
+        args: 7z a Build.7z ./McServerApi/Build
+
+    - name: Upload Linux artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Build
+        path: |
+          Build.7z
