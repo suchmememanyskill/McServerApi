@@ -236,7 +236,15 @@ public class Server
         _terminal.WriteToStdIn("stop");
     }
 
-    private void RunCommand(string command)
+    public void Kill()
+    {
+        if (Status is ServerStatus.Stopped or ServerStatus.Dead)
+            return;
+        
+        _terminal.Kill();
+    }
+
+    public void RunCommand(string command)
     {
         if (Status != ServerStatus.Ready)
             return;

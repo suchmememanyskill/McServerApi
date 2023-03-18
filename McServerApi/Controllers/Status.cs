@@ -51,4 +51,30 @@ public class Status : ControllerBase
 
         return "OK";
     }
+
+    [HttpPost("command")]
+    public string Command(CommandPost commandPost)
+    {
+        if (_server.Status != ServerStatus.Ready)
+        {
+            Response.StatusCode = 409;
+            return "Server is not ready";
+        }
+        
+        _server.RunCommand(commandPost.Command);
+        return "OK";
+    }
+    
+    [HttpPost("kill")]
+    public string Kill()
+    {
+        if (_server.Status is ServerStatus.Stopped or ServerStatus.Dead)
+        {
+            Response.StatusCode = 409;
+            return "Server is stopped";
+        }
+        
+        _server.Kill();
+        return "OK";
+    }
 }
