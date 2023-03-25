@@ -3,7 +3,7 @@
 public class AppConfiguration
 {
     private IConfiguration _root;
-    public long MemoryInGb { get; private set; }
+    public long Memory { get; private set; }
     public string JavaFlags { get; private set; }
     public long ApiPort { get; private set; }
     
@@ -21,7 +21,7 @@ public class AppConfiguration
 
     private void SetValues()
     {
-        MemoryInGb = GetInt("Config:Memory");
+        Memory = GetInt("Config:Memory");
         JavaFlags = GetString("Config:JavaFlags");
         ApiPort = GetInt("Config:ApiPort");
     }
