@@ -71,7 +71,7 @@ public class Server
             return;
         }
 
-        if (!string.IsNullOrWhiteSpace(mcServerJar.AbsoluteServerPath))
+        if (!string.IsNullOrWhiteSpace(mcServerJar.AbsoluteServerPath) && !mcServerJar.AbsoluteServerPath.EndsWith(".sh"))
         {
             await Launch(mcServerJar.AbsoluteServerPath, mcServerJava);
             return;
@@ -144,7 +144,7 @@ public class Server
         
         Log("Downloading new .jar");
         await _cache.RequestJars(WORKDIR, mcServerJar);
-        await Launch(WORKDIR, mcServerJava);
+        await Launch(WORKDIR, mcServerJava, mcServerJar.AbsoluteServerPath.EndsWith(".sh") ? mcServerJar.AbsoluteServerPath : null);
         await _cache.DeleteJars(WORKDIR, mcServerJar);
         
         if (mcServerJar.Mappings.Count > 0)
@@ -214,14 +214,16 @@ public class Server
         }
     }
 
-    public async Task Launch(string workingDir, JavaTemplate java)
+    public async Task Launch(string workingDir, JavaTemplate java, string? forceExec = null)
     {
         _terminal.WorkingDirectory = workingDir;
         ChangeStatus(ServerStatus.Started);
         Log("Starting server");
         string mem = $"{_config.Memory}" + ((_config.Memory <= 128) ? "G" : "M");
-        
-        bool result = await _terminal.Exec(java.Path, $"-Xmx{mem} -Xms{mem} {_config.JavaFlags} -jar server.jar nogui");
+
+        bool result = (string.IsNullOrWhiteSpace(forceExec))
+            ? await _terminal.Exec(java.Path, $"-Xmx{mem} -Xms{mem} {_config.JavaFlags} -jar server.jar nogui")
+            : await _terminal.Exec(forceExec, "");
 
         if (!result)
             ChangeStatus(ServerStatus.Dead);
