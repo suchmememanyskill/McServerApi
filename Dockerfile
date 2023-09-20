@@ -14,7 +14,7 @@ RUN dotnet publish -c release -o /app
 RUN cp -r /source/McServerApi/__mc_server_template /app
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0.3-jammy-amd64
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-jammy
 WORKDIR /app
 COPY --from=build /app ./
 RUN mkdir -p __mc_maps
